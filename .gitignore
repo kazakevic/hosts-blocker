@@ -7,3 +7,4 @@ dist/
 
 # Local agent/session state, not part of the project
 .claude/
+publish-fd/
