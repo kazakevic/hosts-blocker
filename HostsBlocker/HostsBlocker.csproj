@@ -7,6 +7,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
     <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>appicon.ico</ApplicationIcon>
     <AssemblyName>HostsBlocker</AssemblyName>
     <RootNamespace>HostsBlocker</RootNamespace>
   </PropertyGroup>
