@@ -1,0 +1,119 @@
+<Window x:Class="HostsBlocker.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Hosts Blocker" Height="640" Width="560" MinHeight="420" MinWidth="460"
+        Background="{StaticResource Bg}"
+        WindowStartupLocation="CenterScreen"
+        TextOptions.TextFormattingMode="Ideal">
+
+  <Grid Margin="22,18,22,18">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="*" />
+      <RowDefinition Height="Auto" />
+    </Grid.RowDefinitions>
+
+    <!-- Header -->
+    <StackPanel Grid.Row="0" Margin="0,0,0,16">
+      <TextBlock Text="Hosts Blocker" FontSize="22" FontWeight="SemiBold" />
+      <TextBlock Text="Blocks exactly the hostnames listed - other subdomains stay reachable."
+                 Foreground="{StaticResource Muted}" FontSize="12" Margin="0,4,0,0" />
+    </StackPanel>
+
+    <!-- Add bar -->
+    <Border Grid.Row="1" Background="{StaticResource Surface}" CornerRadius="10"
+            BorderBrush="{StaticResource Border}" BorderThickness="1" Padding="12">
+      <Grid>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="*" />
+          <ColumnDefinition Width="Auto" />
+          <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Column="0">
+          <TextBox x:Name="DomainInput" KeyDown="DomainInput_KeyDown" TextChanged="DomainInput_TextChanged" />
+          <TextBlock x:Name="Placeholder" Text="e.g. cnn.com" IsHitTestVisible="False"
+                     Foreground="{StaticResource Muted}" FontSize="14"
+                     VerticalAlignment="Center" Margin="11,0,0,0" />
+        </Grid>
+
+        <CheckBox Grid.Column="1" x:Name="IncludeWww" Style="{StaticResource SmallCheck}"
+                  Content="+ www" IsChecked="True" Margin="12,0,10,0"
+                  ToolTip="Also block the www. hostname" />
+
+        <Button Grid.Column="2" Content="Add" Style="{StaticResource PrimaryButton}"
+                Click="Add_Click" />
+      </Grid>
+    </Border>
+
+    <!-- List -->
+    <Border Grid.Row="2" Margin="0,14,0,0" Background="{StaticResource Surface}" CornerRadius="10"
+            BorderBrush="{StaticResource Border}" BorderThickness="1">
+      <Grid>
+        <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="6">
+          <ItemsControl x:Name="SiteList">
+            <ItemsControl.ItemTemplate>
+              <DataTemplate>
+                <Border Background="Transparent" CornerRadius="8" Padding="10,9" Margin="2">
+                  <Grid>
+                    <Grid.ColumnDefinitions>
+                      <ColumnDefinition Width="Auto" />
+                      <ColumnDefinition Width="*" />
+                      <ColumnDefinition Width="Auto" />
+                      <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <CheckBox Grid.Column="0" Style="{StaticResource Switch}"
+                              IsChecked="{Binding Enabled, Mode=TwoWay}"
+                              VerticalAlignment="Center" Margin="0,0,12,0"
+                              ToolTip="Blocked / allowed" />
+
+                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                      <TextBlock Text="{Binding Domain}" FontSize="14" />
+                      <TextBlock Text="{Binding HostList}" Foreground="{StaticResource Muted}"
+                                 FontSize="11" FontFamily="Consolas" Margin="0,2,0,0" />
+                    </StackPanel>
+
+                    <CheckBox Grid.Column="2" Style="{StaticResource SmallCheck}" Content="+ www"
+                              IsChecked="{Binding IncludeWww, Mode=TwoWay}" Margin="0,0,8,0"
+                              VerticalAlignment="Center" />
+
+                    <Button Grid.Column="3" Content="✕" Style="{StaticResource GhostButton}"
+                            Click="Remove_Click" VerticalAlignment="Center"
+                            ToolTip="Remove from the hosts file" />
+                  </Grid>
+                </Border>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+        </ScrollViewer>
+
+        <StackPanel x:Name="EmptyState" VerticalAlignment="Center" HorizontalAlignment="Center"
+                    Visibility="Collapsed">
+          <TextBlock Text="Nothing blocked yet." Foreground="{StaticResource Muted}"
+                     HorizontalAlignment="Center" />
+          <Button Content="Add common news sites" Style="{StaticResource GhostButton}"
+                  Click="AddPreset_Click" Margin="0,8,0,0" />
+        </StackPanel>
+      </Grid>
+    </Border>
+
+    <!-- Footer -->
+    <Grid Grid.Row="3" Margin="0,14,0,0">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*" />
+        <ColumnDefinition Width="Auto" />
+        <ColumnDefinition Width="Auto" />
+      </Grid.ColumnDefinitions>
+
+      <TextBlock x:Name="Status" Grid.Column="0" VerticalAlignment="Center"
+                 Foreground="{StaticResource Muted}" FontSize="12" TextTrimming="CharacterEllipsis" />
+
+      <Button Grid.Column="1" Content="Reload" Style="{StaticResource GhostButton}"
+              Click="Reload_Click" Margin="0,0,8,0" />
+      <Button x:Name="ApplyButton" Grid.Column="2" Content="Apply changes"
+              Style="{StaticResource PrimaryButton}" Click="Apply_Click" IsEnabled="False" />
+    </Grid>
+  </Grid>
+</Window>
